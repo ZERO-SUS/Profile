@@ -1,0 +1,12 @@
+{
+  "posts": [
+    {
+      "id": "welcome-zero-sus",
+      "title": "Welcome to ZERO SUS",
+      "date": "2026-08-07",
+      "tags": ["update", "meta"],
+      "excerpt": "New site, new home for my projects and writing. Here's what I'm building and where this is going.",
+      "body": "This is the first post on the new **ZERO SUS** site.\n\nI'm building modern applications, creating clean UI, and learning cyber security — and this blog is where I'll log the journey.\n\n## What to expect\n\n- Project breakdowns\n- Things I learn while building\n- Notes from the security side\n\n> Turning ideas into reality, one post at a time.\n\nWritten and published straight from my own admin panel. More soon."
+    }
+  ]
+}
