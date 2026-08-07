@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>ZERO SUS — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <!-- ================= LOGIN ================= -->
+  <section class="login-wrap" id="loginScreen">
+    <div class="login panel">
+      <div class="login__lock" aria-hidden="true">⬡</div>
+      <h1>Admin Access</h1>
+      <p class="login__sub">Sign in with your email &amp; password to publish.</p>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@gmail.com" autocomplete="username" spellcheck="false" required />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" required />
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn btn--solid">Sign in</button>
+          <span class="status is-info" id="loginStatus"></span>
+        </div>
+      </form>
+
+      <details>
+        <summary>First time? One-time setup (Firebase)</summary>
+        <ol>
+          <li>Create a project at <a href="https://console.firebase.google.com" target="_blank" rel="noopener">Firebase Console</a>.</li>
+          <li>Add a Web App and paste its keys into <b>js/firebase-config.js</b>.</li>
+          <li>Enable <b>Authentication → Email/Password</b>, then add your Gmail + a password as a user.</li>
+          <li>Create a <b>Firestore</b> database and paste the rules from <b>ADMIN_GUIDE.md</b>.</li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= APP ================= -->
+  <main class="admin hidden" id="appScreen">
+    <div class="admin__bar">
+      <a class="admin__brand" href="index.html"><span class="nav__mark">0S</span> ZERO SUS · Admin</a>
+      <div class="admin__whoami">
+        <span>Signed in as <b id="whoami">—</b></span>
+        <button class="mini" id="logoutBtn">Log out</button>
+      </div>
+    </div>
+
+    <!-- Editor -->
+    <section class="panel">
+      <h2 class="panel__title" id="editorTitle">New Post</h2>
+      <p class="panel__hint">Write in Markdown. Preview updates live. Publishing saves to <code id="repoLabel">Firestore</code> and goes live instantly.</p>
+
+      <div class="field">
+        <label for="postTitle">Title</label>
+        <input type="text" id="postTitle" placeholder="A short, sharp title" />
+      </div>
+      <div class="field--row">
+        <div class="field">
+          <label for="postTags">Tags (comma separated)</label>
+          <input type="text" id="postTags" placeholder="update, security, project" />
+        </div>
+        <div class="field">
+          <label for="postDate">Date</label>
+          <input type="date" id="postDate" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="postExcerpt">Excerpt (shown on the card)</label>
+        <input type="text" id="postExcerpt" placeholder="One line that makes people want to read it." />
+      </div>
+
+      <div class="editor__grid">
+        <div class="field" style="margin:0">
+          <label for="postBody">Body — Markdown</label>
+          <textarea id="postBody" placeholder="# Heading&#10;&#10;Write your post here…&#10;&#10;- point one&#10;- point two&#10;&#10;**bold**, *italic*, `code`, [links](https://example.com)."></textarea>
+        </div>
+        <div>
+          <div class="editor__label">Live preview</div>
+          <div class="editor__preview" id="preview"></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn--solid" id="publishBtn">Publish</button>
+        <button class="btn btn--ghost" id="newBtn">Clear / New</button>
+        <span class="status is-info" id="status"></span>
+      </div>
+    </section>
+
+    <!-- Existing posts -->
+    <section class="panel">
+      <h2 class="panel__title">Published posts</h2>
+      <p class="panel__hint">Edit or delete anything you've published.</p>
+      <ul class="plist" id="postList"><li>Loading…</li></ul>
+    </section>
+
+    <!-- Projects / repos -->
+    <section class="panel">
+      <h2 class="panel__title" id="projEditorTitle">Add Project / Repo</h2>
+      <p class="panel__hint">Add a project card to the <b>Selected Work</b> section. Link it to a GitHub repo or any URL.</p>
+
+      <div class="field">
+        <label for="projTitle">Project name</label>
+        <input type="text" id="projTitle" placeholder="ZERO SUS Panel" />
+      </div>
+      <div class="field--row">
+        <div class="field">
+          <label for="projTag">Tag / category</label>
+          <input type="text" id="projTag" placeholder="Tooling · Panel" />
+        </div>
+        <div class="field">
+          <label for="projMeta">Meta label (right corner)</label>
+          <input type="text" id="projMeta" placeholder="Featured / HTML / 2026" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="projUrl">Repo / project URL</label>
+        <input type="url" id="projUrl" placeholder="https://github.com/ZERO-SUS/repo-name" spellcheck="false" />
+      </div>
+      <div class="field">
+        <label for="projDesc">Short description</label>
+        <input type="text" id="projDesc" placeholder="What the project is, in one line." />
+      </div>
+      <div class="field--row">
+        <div class="field">
+          <label for="projStack">Tech stack (comma separated)</label>
+          <input type="text" id="projStack" placeholder="HTML, JS, Python" />
+        </div>
+        <div class="field">
+          <label for="projOrder">Order (lower = first)</label>
+          <input type="number" id="projOrder" placeholder="1" />
+        </div>
+      </div>
+      <label class="check"><input type="checkbox" id="projWide" /> Wide card (spans two columns)</label>
+
+      <div class="actions">
+        <button class="btn btn--solid" id="projSaveBtn">Add project</button>
+        <button class="btn btn--ghost" id="projNewBtn">Clear / New</button>
+        <span class="status is-info" id="projStatus"></span>
+      </div>
+
+      <ul class="plist" id="projList" style="margin-top:24px"><li>Loading…</li></ul>
+    </section>
+  </main>
+
+  <script src="js/md.js" defer></script>
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+{
+  "projects": [
+    {
+      "id": "zero-sus-panel",
+      "title": "ZERO SUS Panel",
+      "tag": "Tooling · Panel",
+      "desc": "My control panel project — a clean, custom-built interface for managing tools and workflows in one place.",
+      "stack": ["UI", "Automation"],
+      "meta": "Featured",
+      "url": "https://github.com/ZERO-SUS/ZERO-SUS-PANNEL-1",
+      "wide": true,
+      "order": 1
+    },
+    {
+      "id": "portfolio",
+      "title": "Portfolio",
+      "tag": "Web · Personal",
+      "desc": "My personal portfolio site and digital identity.",
+      "stack": ["HTML", "CSS"],
+      "meta": "HTML",
+      "url": "https://github.com/ZERO-SUS/portfolio",
+      "wide": false,
+      "order": 2
+    },
+    {
+      "id": "qr-zero",
+      "title": "QR ZERO",
+      "tag": "Utility · Web",
+      "desc": "A fast, minimal QR code generator built for the web.",
+      "stack": ["HTML", "JS"],
+      "meta": "HTML",
+      "url": "https://github.com/ZERO-SUS/QR-ZERO",
+      "wide": false,
+      "order": 3
+    },
+    {
+      "id": "c-projects",
+      "title": "C++ Projects",
+      "tag": "Learning · Systems",
+      "desc": "Learning C++ through practical programs and examples — from basic syntax to advanced concepts.",
+      "stack": ["C++"],
+      "meta": "C++",
+      "url": "https://github.com/ZERO-SUS/C-Projects",
+      "wide": false,
+      "order": 4
+    },
+    {
+      "id": "account-logic",
+      "title": "Account Management Logic",
+      "tag": "Backend · Logic",
+      "desc": "Python logic for handling account management flows cleanly and reliably.",
+      "stack": ["Python"],
+      "meta": "Python",
+      "url": "https://github.com/ZERO-SUS/logic_for_account_management",
+      "wide": false,
+      "order": 5
+    },
+    {
+      "id": "discord-token",
+      "title": "Discord Token Tool",
+      "tag": "Automation · Bot",
+      "desc": "A JavaScript utility for working with Discord tokens and automating tasks.",
+      "stack": ["JavaScript"],
+      "meta": "JS",
+      "url": "https://github.com/ZERO-SUS/Discord_Token_Manuplation",
+      "wide": true,
+      "order": 6
+    }
+  ]
+}

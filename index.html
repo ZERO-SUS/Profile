@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="ZERO SUS — Front-end engineer & creative developer crafting minimal, premium, futuristic interfaces." />
+  <title>ZERO SUS — Digital Identity</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Ambient background -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow" aria-hidden="true"></div>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+  <!-- Scroll progress -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- Nav -->
+  <header class="nav" id="nav">
+    <a href="#top" class="nav__brand" aria-label="ZERO SUS home">
+      <span class="nav__mark">0S</span>
+      <span class="nav__name">ZERO&nbsp;SUS</span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#work">Work</a>
+      <a href="#skills">Skills</a>
+      <a href="#journey">Journey</a>
+      <a href="#blog">Blog</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a href="#contact" class="btn btn--ghost nav__cta">Let's talk</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero__bg" aria-hidden="true">
+        <img src="assets/hero.png" alt="" decoding="async" />
+      </div>
+
+      <div class="hero__center">
+        <p class="hero__eyebrow reveal"><span class="dot"></span> Where design meets code</p>
+        <h1 class="hero__mega reveal">ZERO SUS</h1>
+        <p class="hero__role reveal">Graphic designer &amp; programmer</p>
+        <p class="hero__sub reveal">Front-End Developer · building clean, futuristic interfaces</p>
+        <div class="hero__actions reveal">
+          <a href="#work" class="btn btn--solid">
+            View my projects
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="https://github.com/ZERO-SUS" target="_blank" rel="noopener" class="btn btn--ghost">GitHub profile</a>
+        </div>
+      </div>
+
+      <div class="hero__scroll" aria-hidden="true">
+        <span>Scroll down</span>
+        <div class="hero__scroll-line"></div>
+        <span>to see projects</span>
+      </div>
+    </section>
+
+    <!-- GitHub live stats -->
+    <section class="ghstats">
+      <dl class="hero__stats reveal">
+        <div><dt>Repositories</dt><dd data-count="0" data-gh="repos">0</dd></div>
+        <div><dt>Followers</dt><dd data-count="0" data-gh="followers">0</dd></div>
+        <div><dt>Stars earned</dt><dd data-count="0" data-gh="stars">0</dd></div>
+      </dl>
+      <p class="hero__live reveal" id="ghLive"><span class="dot"></span> Live from <a href="https://github.com/ZERO-SUS" target="_blank" rel="noopener">github.com/ZERO-SUS</a></p>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>Minimal</span><span>·</span><span>Premium</span><span>·</span><span>Futuristic</span><span>·</span>
+        <span>Performance-first</span><span>·</span><span>Accessible</span><span>·</span><span>Intentional</span><span>·</span>
+        <span>Minimal</span><span>·</span><span>Premium</span><span>·</span><span>Futuristic</span><span>·</span>
+        <span>Performance-first</span><span>·</span><span>Accessible</span><span>·</span><span>Intentional</span><span>·</span>
+      </div>
+    </div>
+
+    <!-- WORK -->
+    <section class="section" id="work">
+      <header class="section__head reveal">
+        <span class="section__index">01</span>
+        <h2 class="section__title">Selected Work</h2>
+        <p class="section__sub">A handful of things I'm proud to have shipped.</p>
+      </header>
+
+      <div class="cards" id="projectList">
+        <p class="blog__state">Loading projects…</p>
+      </div>
+
+      <p class="cards__more reveal">
+        <a href="https://github.com/ZERO-SUS?tab=repositories" target="_blank" rel="noopener">See all repositories on GitHub ↗</a>
+      </p>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section" id="skills">
+      <header class="section__head reveal">
+        <span class="section__index">02</span>
+        <h2 class="section__title">Capabilities</h2>
+        <p class="section__sub">The tools I reach for, and the craft behind them.</p>
+      </header>
+
+      <div class="skills">
+        <div class="skill reveal">
+          <div class="skill__icon">◈</div>
+          <h3>Front-End Development</h3>
+          <p>HTML, CSS &amp; JavaScript. Clean, responsive UI that feels fast and intentional.</p>
+          <div class="skill__bar"><i style="--v:92%"></i></div>
+        </div>
+        <div class="skill reveal">
+          <div class="skill__icon">◇</div>
+          <h3>Graphic Design</h3>
+          <p>Visual identity, layout &amp; typography. Turning ideas into clean, premium visuals.</p>
+          <div class="skill__bar"><i style="--v:90%"></i></div>
+        </div>
+        <div class="skill reveal">
+          <div class="skill__icon">◆</div>
+          <h3>Programming</h3>
+          <p>C++, Python &amp; JavaScript. Building logic, tools and modern applications.</p>
+          <div class="skill__bar"><i style="--v:85%"></i></div>
+        </div>
+        <div class="skill reveal">
+          <div class="skill__icon">▲</div>
+          <h3>Cyber Security</h3>
+          <p>Currently learning — offensive &amp; defensive fundamentals, always leveling up.</p>
+          <div class="skill__bar"><i style="--v:60%"></i></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- JOURNEY / TIMELINE -->
+    <section class="section" id="journey">
+      <header class="section__head reveal">
+        <span class="section__index">03</span>
+        <h2 class="section__title">The Journey</h2>
+        <p class="section__sub">A short trace of where the craft was sharpened.</p>
+      </header>
+
+      <ol class="timeline">
+        <li class="timeline__item reveal">
+          <div class="timeline__node"></div>
+          <span class="timeline__year">Now</span>
+          <h3>Learning Cyber Security</h3>
+          <p>Diving into security fundamentals while shipping tools and modern web apps.</p>
+        </li>
+        <li class="timeline__item reveal">
+          <div class="timeline__node"></div>
+          <span class="timeline__year">Building</span>
+          <h3>ZERO SUS Panel &amp; Tools</h3>
+          <p>Creating custom panels, automation utilities and clean interfaces under the ZERO SUS name.</p>
+        </li>
+        <li class="timeline__item reveal">
+          <div class="timeline__node"></div>
+          <span class="timeline__year">Front-End</span>
+          <h3>Web &amp; UI Projects</h3>
+          <p>Portfolio, QR ZERO and more — turning ideas into responsive, polished front-ends.</p>
+        </li>
+        <li class="timeline__item reveal">
+          <div class="timeline__node"></div>
+          <span class="timeline__year">Foundations</span>
+          <h3>Programming &amp; Design</h3>
+          <p>Started with C++, Python and graphic design — the roots of everything I build now.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- BLOG -->
+    <section class="section" id="blog">
+      <header class="section__head reveal">
+        <span class="section__index">04</span>
+        <h2 class="section__title">Writing</h2>
+        <p class="section__sub">Logs, thoughts, and things I'm learning along the way.</p>
+      </header>
+
+      <div class="blog" id="blogList">
+        <p class="blog__state">Loading posts…</p>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact" id="contact">
+      <div class="contact__inner reveal">
+        <span class="section__index">05</span>
+        <h2 class="contact__title">Let's build something<br /><span class="accent">worth remembering.</span></h2>
+        <p class="contact__sub">Got an idea, a collab, or just want to talk? Come through — my DMs are open.</p>
+        <a href="https://discord.gg/YxBX82Tdgp" target="_blank" rel="noopener" class="btn btn--solid btn--lg">
+          Join my Discord
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <div class="contact__socials">
+          <a href="https://github.com/ZERO-SUS" target="_blank" rel="noopener" aria-label="GitHub">GitHub</a>
+          <a href="https://www.youtube.com/@ZEROSUS-s7i" target="_blank" rel="noopener" aria-label="YouTube">YouTube</a>
+          <a href="https://open.spotify.com/user/31g4witavbhronq4vkv3xzcp4rfa" target="_blank" rel="noopener" aria-label="Spotify">Spotify</a>
+          <a href="https://guns.lol/zero_sus" target="_blank" rel="noopener" aria-label="guns.lol">guns.lol</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BIG OUTRO -->
+    <section class="outro" id="outro">
+      <p class="outro__date reveal" id="liveDate">&nbsp;</p>
+      <h2 class="outro__title reveal">ZERO SUS</h2>
+      <p class="outro__badge reveal"><span class="dot"></span> Available For Work</p>
+      <p class="outro__role reveal">Graphic designer &amp; front-end developer</p>
+      <a href="#contact" class="btn btn--ghost outro__cta reveal">Contact</a>
+      <div class="outro__socials reveal">
+        <a href="https://discord.gg/YxBX82Tdgp" target="_blank" rel="noopener" aria-label="Discord">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.317 4.369A19.79 19.79 0 0 0 16.558 3.2a.07.07 0 0 0-.074.035c-.32.57-.676 1.315-.926 1.9a18.27 18.27 0 0 0-5.116 0 12.6 12.6 0 0 0-.94-1.9.07.07 0 0 0-.074-.035A19.74 19.74 0 0 0 3.677 4.37a.06.06 0 0 0-.03.024C1.11 8.045.42 11.63.76 15.168a.08.08 0 0 0 .031.055 19.9 19.9 0 0 0 5.993 3.03.07.07 0 0 0 .076-.027c.462-.63.874-1.295 1.226-1.994a.07.07 0 0 0-.038-.098 13.1 13.1 0 0 1-1.872-.892.07.07 0 0 1-.007-.117c.126-.094.252-.192.372-.291a.07.07 0 0 1 .071-.01c3.927 1.793 8.18 1.793 12.061 0a.07.07 0 0 1 .072.009c.12.099.246.198.373.292a.07.07 0 0 1-.006.117c-.598.35-1.22.644-1.873.891a.07.07 0 0 0-.038.099c.36.698.772 1.362 1.225 1.993a.07.07 0 0 0 .076.028 19.84 19.84 0 0 0 6-3.03.07.07 0 0 0 .03-.054c.5-4.094-.838-7.65-3.548-10.775a.06.06 0 0 0-.03-.025ZM8.02 12.99c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.955 2.419-2.157 2.419Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419Z"/></svg>
+        </a>
+        <a href="mailto:suszero9@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M3 6h18v12H3zM3 7l9 6 9-6"/></svg>
+        </a>
+        <a href="https://github.com/ZERO-SUS" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.575.106.785-.25.785-.556 0-.274-.01-1-.015-1.965-3.196.695-3.87-1.54-3.87-1.54-.523-1.33-1.277-1.685-1.277-1.685-1.044-.714.08-.699.08-.699 1.155.081 1.763 1.186 1.763 1.186 1.026 1.758 2.693 1.25 3.35.956.103-.744.401-1.25.73-1.538-2.552-.29-5.236-1.276-5.236-5.678 0-1.254.448-2.28 1.183-3.084-.119-.29-.513-1.46.112-3.043 0 0 .965-.309 3.163 1.178a10.98 10.98 0 0 1 5.76 0c2.196-1.487 3.16-1.178 3.16-1.178.626 1.583.232 2.753.114 3.043.737.804 1.182 1.83 1.182 3.084 0 4.413-2.688 5.385-5.248 5.67.413.355.78 1.056.78 2.128 0 1.537-.014 2.776-.014 3.153 0 .309.207.667.79.554A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
+        </a>
+        <a href="https://guns.lol/zero_sus" target="_blank" rel="noopener" aria-label="guns.lol">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/></g></svg>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__main">
+      <a href="mailto:suszero9@gmail.com" class="footer__email">suszero9@gmail.com</a>
+      <span class="footer__center">Design by ZERO SUS</span>
+      <span class="footer__rights">All rights reserved ZERO SUS ©2026</span>
+    </div>
+    <div class="footer__sub">
+      <a href="#top" class="footer__top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <!-- Blog reader -->
+  <div class="reader" id="reader" hidden>
+    <div class="reader__backdrop" data-close></div>
+    <div class="reader__panel" role="dialog" aria-modal="true" aria-label="Blog post">
+      <button class="reader__close" id="readerClose" aria-label="Close">✕</button>
+      <article class="reader__content" id="readerContent"></article>
+    </div>
+  </div>
+
+  <!-- Background music (autoplays; starts on first interaction if the browser blocks it) -->
+  <audio id="bgMusic" src="assets/bg-music.mp3" loop autoplay preload="auto"></audio>
+
+  <script src="js/main.js" defer></script>
+  <script src="js/md.js" defer></script>
+  <script src="js/github.js" defer></script>
+  <script type="module" src="js/projects.js"></script>
+  <script type="module" src="js/blog.js"></script>
+</body>
+</html>
