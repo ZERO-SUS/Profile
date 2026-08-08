@@ -1,7 +1,8 @@
 # ZERO SUS — Portfolio
 
-A minimal, premium, futuristic portfolio. Black / white / dark-gray with subtle red accents.
-Aesthetic reference: Vercel × Linear × Apple × Stripe × Raycast.
+A minimal, premium, futuristic portfolio. Black / white / dark-gray with subtle Black accents.
+Aesthetic reference: Vercel × Linear × Dark × Stripe × Raycast.
+https://zero-sus.github.io/Profile/
 
 ## Stack
 Zero dependencies. Plain **HTML + modern CSS + vanilla JS**. No build step.
