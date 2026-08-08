@@ -6,6 +6,8 @@
   <meta name="theme-color" content="#000000" />
   <meta name="description" content="ZERO SUS — Front-end engineer & creative developer crafting minimal, premium, futuristic interfaces." />
   <title>ZERO SUS — Digital Identity</title>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="apple-touch-icon" href="assets/logo.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -274,6 +276,30 @@
 
   <!-- Background music (autoplays; starts on first interaction if the browser blocks it) -->
   <audio id="bgMusic" src="assets/bg-music.mp3" loop autoplay preload="auto"></audio>
+
+  <!-- Animated browser-tab title: types out "ZERO SUS", then backspaces, looping -->
+  <script>
+    (() => {
+      "use strict";
+      const FULL = "ZERO SUS";
+      const TYPE = 220;   // ms per typed char
+      const ERASE = 120;  // ms per erased char
+      const HOLD = 1400;  // pause once fully typed
+      const GAP = 600;    // pause once fully erased
+      let i = 0, dir = 1; // dir: 1 = typing, -1 = erasing
+      const tick = () => {
+        document.title = FULL.slice(0, i) + "▉"; // block cursor
+        if (dir === 1) {
+          if (i < FULL.length) { i++; setTimeout(tick, TYPE); }
+          else { dir = -1; setTimeout(tick, HOLD); }
+        } else {
+          if (i > 0) { i--; setTimeout(tick, ERASE); }
+          else { dir = 1; setTimeout(tick, GAP); }
+        }
+      };
+      tick();
+    })();
+  </script>
 
   <script src="js/main.js" defer></script>
   <script src="js/md.js" defer></script>
