@@ -56,12 +56,14 @@ if (list) {
   };
 
   const render = (repos) => {
-    if (!repos || !repos.length) {
-      list.innerHTML = `<p class="blog__state">No repositories found.</p>`;
+    // Only show starred repos (at least one star).
+    const starred = (repos || []).filter((r) => (r.stargazers_count || 0) > 0);
+    if (!starred.length) {
+      list.innerHTML = `<p class="blog__state">No starred repositories yet.</p>`;
       return;
     }
     // Most-starred first, then most recently pushed. Top repo gets the wide "featured" box.
-    const sorted = repos.slice().sort(
+    const sorted = starred.slice().sort(
       (a, b) =>
         (b.stargazers_count - a.stargazers_count) ||
         (new Date(b.pushed_at) - new Date(a.pushed_at))
