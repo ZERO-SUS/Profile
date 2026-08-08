@@ -47,6 +47,122 @@ a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
 ::selection { background: var(--accent); color: #fff; }
 
+/* ---------- Enter gate — liquid / crystal glass ---------- */
+.enter {
+  position: fixed; inset: 0; z-index: 200;
+  display: grid; place-items: center; text-align: center;
+  padding: 24px; overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 30%, #0b0b0d, #000 78%);
+  transition: opacity .7s var(--ease), visibility .7s var(--ease);
+}
+.enter.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+/* Coloured light orbs drifting behind the glass — the "liquid" light source */
+.enter__orbs { position: absolute; inset: -10%; z-index: 0; pointer-events: none; filter: blur(60px); }
+.enter__orbs span { position: absolute; width: 46vmin; height: 46vmin; border-radius: 50%; mix-blend-mode: screen; opacity: .55; }
+.enter__orbs span:nth-child(1) { left: 8%;  top: 14%; background: radial-gradient(circle, rgba(255,255,255,.9), transparent 66%); animation: orbFloat 16s ease-in-out infinite alternate; }
+.enter__orbs span:nth-child(2) { right: 6%; top: 30%; background: radial-gradient(circle, rgba(200,200,200,.7), transparent 66%); animation: orbFloat 22s ease-in-out infinite alternate-reverse; }
+.enter__orbs span:nth-child(3) { left: 34%; bottom: 8%; background: radial-gradient(circle, rgba(255,255,255,.6), transparent 66%); animation: orbFloat 19s ease-in-out infinite alternate; }
+@keyframes orbFloat {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(6vmin, -5vmin) scale(1.18); }
+  100% { transform: translate(-5vmin, 4vmin) scale(1); }
+}
+
+/* The frosted glass panel */
+.enter__glass {
+  position: relative; z-index: 1; overflow: hidden;
+  padding: clamp(34px, 7vw, 64px) clamp(30px, 8vw, 78px);
+  border-radius: 30px;
+  background: linear-gradient(150deg, rgba(255,255,255,.16), rgba(255,255,255,.04) 42%, rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.22);
+  backdrop-filter: blur(26px) saturate(180%);
+  -webkit-backdrop-filter: blur(26px) saturate(180%);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.55),
+    inset 0 1px 1px rgba(255,255,255,.55),
+    inset 0 -1px 1px rgba(255,255,255,.08),
+    inset 0 0 40px rgba(255,255,255,.05);
+  animation: fade .9s var(--ease) both, glassRise 1s var(--ease) both;
+}
+@keyframes glassRise { from { transform: translateY(16px) scale(.98); } to { transform: none; } }
+
+/* A slow specular sheen sweeping across the glass */
+.enter__sheen {
+  position: absolute; inset: 0; pointer-events: none; border-radius: inherit; overflow: hidden;
+}
+.enter__sheen::before {
+  content: ""; position: absolute; top: -60%; left: -30%; width: 55%; height: 220%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,.35), transparent);
+  transform: rotate(18deg); filter: blur(8px);
+  animation: sheenSweep 6.5s var(--ease) infinite;
+}
+@keyframes sheenSweep {
+  0%   { left: -40%; opacity: 0; }
+  35%  { opacity: 1; }
+  70%  { left: 120%; opacity: 0; }
+  100% { left: 120%; opacity: 0; }
+}
+
+.enter__inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.enter__mark {
+  font-family: var(--mono); font-weight: 700; letter-spacing: .06em;
+  font-size: 13px; color: rgba(255,255,255,.75);
+  border: 1px solid rgba(255,255,255,.25); border-radius: 8px; padding: 6px 10px; margin-bottom: 18px;
+  background: rgba(255,255,255,.06);
+}
+.enter__title {
+  font-size: clamp(2.4rem, 12vw, 5.5rem); font-weight: 700; letter-spacing: -.03em; line-height: 1;
+  background: linear-gradient(180deg, #fff 24%, #d0d0d0 78%, #8f8f8f 120%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  margin-bottom: 30px; text-shadow: 0 2px 30px rgba(255,255,255,.12);
+}
+.enter__hint {
+  margin-top: 15px; font-family: var(--mono); font-size: 12px; letter-spacing: .14em;
+  text-transform: uppercase; color: rgba(255,255,255,.55);
+}
+
+/* ---------- Reusable liquid-glass button ---------- */
+.glass-btn {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font); font-size: 15px; font-weight: 600; letter-spacing: .01em;
+  color: #fff; cursor: pointer;
+  padding: 15px 30px; border-radius: 999px;
+  background: linear-gradient(160deg, rgba(255,255,255,.28), rgba(255,255,255,.08) 55%, rgba(255,255,255,.04));
+  border: 1px solid rgba(255,255,255,.32);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  box-shadow:
+    0 8px 30px rgba(0,0,0,.35),
+    inset 0 1px 1px rgba(255,255,255,.7),
+    inset 0 -2px 6px rgba(255,255,255,.08);
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease);
+}
+.glass-btn svg { position: relative; z-index: 2; }
+.glass-btn span:not(.glass-btn__shine) { position: relative; z-index: 2; }
+.glass-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.5);
+  box-shadow: 0 14px 44px rgba(255,255,255,.28), inset 0 1px 1px rgba(255,255,255,.8), inset 0 -2px 6px rgba(255,255,255,.12);
+}
+.glass-btn:active { transform: translateY(0) scale(.98); }
+/* Moving specular light streaking across the button */
+.glass-btn__shine {
+  position: absolute; top: 0; left: -30%; z-index: 1; width: 40%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.6), transparent);
+  transform: skewX(-18deg); pointer-events: none;
+  animation: btnShine 3.8s var(--ease) infinite;
+}
+@keyframes btnShine {
+  0%   { left: -40%; }
+  55%  { left: 130%; }
+  100% { left: 130%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .enter__orbs span, .enter__sheen::before, .glass-btn__shine { animation: none !important; }
+}
+
 /* ---------- Ambient background ---------- */
 .bg-grid {
   position: fixed; inset: 0; z-index: -3; pointer-events: none;
@@ -145,15 +261,42 @@ img { max-width: 100%; display: block; }
     radial-gradient(38% 32% at 72% 42%, rgba(255,255,255,.05), transparent 72%);
   filter: blur(30px); animation: outroDrift 18s ease-in-out infinite alternate;
 }
-/* the hooded figure, faded to atmosphere behind the text */
-.hero__bg { position: absolute; inset: 0; z-index: -1; display: grid; place-items: center; pointer-events: none; }
-.hero__bg img {
-  height: 90%; max-height: 820px; width: auto; opacity: .2; display: block;
-  -webkit-mask-image: radial-gradient(58% 68% at 50% 44%, #000 38%, transparent 84%);
-  mask-image: radial-gradient(58% 68% at 50% 44%, #000 38%, transparent 84%);
-  animation: heroFloat 8s ease-in-out infinite alternate;
+/* flowing white "air" waves behind the hero */
+.hero__waves {
+  position: absolute; inset: -30% -20% auto -20%; height: 130%; z-index: -2;
+  pointer-events: none; overflow: hidden; opacity: .9;
+  mask-image: radial-gradient(75% 70% at 50% 30%, #000 40%, transparent 85%);
+  -webkit-mask-image: radial-gradient(75% 70% at 50% 30%, #000 40%, transparent 85%);
 }
-@keyframes heroFloat { from { transform: translateY(-10px); } to { transform: translateY(10px); } }
+.hero__waves span {
+  position: absolute; left: 50%; top: 40%; width: 130vw; height: 130vw;
+  border-radius: 45% 55% 52% 48% / 50% 48% 52% 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(50px); mix-blend-mode: screen;
+}
+.hero__waves span:nth-child(1) {
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.16), transparent 62%);
+  animation: waveDrift 20s ease-in-out infinite alternate;
+}
+.hero__waves span:nth-child(2) {
+  width: 100vw; height: 100vw; top: 32%;
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.12), transparent 60%);
+  animation: waveDrift 26s ease-in-out infinite alternate-reverse;
+}
+.hero__waves span:nth-child(3) {
+  width: 80vw; height: 80vw; top: 50%;
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.10), transparent 58%);
+  animation: waveDrift 32s ease-in-out infinite alternate;
+}
+@keyframes waveDrift {
+  0%   { transform: translate(-58%, -52%) rotate(0deg)   scale(1); }
+  50%  { transform: translate(-44%, -46%) rotate(180deg) scale(1.15); }
+  100% { transform: translate(-56%, -54%) rotate(360deg) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__waves span { animation: none !important; }
+}
+
 .hero__center { display: flex; flex-direction: column; align-items: center; max-width: 100%; width: 100%; }
 .hero__eyebrow {
   display: inline-flex; align-items: center; gap: 9px; align-self: center;
@@ -424,18 +567,35 @@ img { max-width: 100%; display: block; }
   .cards, .skills, .blog { grid-template-columns: 1fr; }
   .card--wide { grid-column: span 1; }
 
-  .section__head { margin-bottom: 40px; }
+  /* Tighten vertical rhythm so sections don't float far apart */
+  .section { padding: clamp(52px, 8vh, 84px) var(--pad); }
+  .section__head { margin-bottom: 38px; }
+  .marquee { margin: 28px 0; padding: 16px 0; }
+  .outro { min-height: auto; padding: 72px var(--pad) 56px; }
 }
 
 /* ---- Phones ---- */
 @media (max-width: 640px) {
   .nav { padding: 12px var(--pad); }
 
-  .hero { padding: 104px var(--pad) 80px; }
+  /* Compact section spacing on phones — no big empty gaps between pages */
+  .section { padding: 46px var(--pad); }
+  .section__head { margin-bottom: 30px; }
+  .marquee { margin: 20px 0; padding: 14px 0; }
+  .contact__sub { margin-bottom: 26px; }
+  .outro { padding: 56px var(--pad) 44px; }
+
+  .hero { padding: 104px var(--pad) 72px; min-height: auto; }
   /* Let the hero actions stack and go full-width so taps are easy */
   .hero__actions { width: 100%; flex-direction: column; gap: 12px; }
   .hero__actions .btn { width: 100%; justify-content: center; }
   .hero__scroll { display: none; }
+
+  /* Keep the airy waves softer + centered on small screens so text stays crisp */
+  .hero__waves { opacity: .7; }
+  .hero__waves span { width: 150vw; height: 150vw; filter: blur(38px); }
+  .hero__waves span:nth-child(2) { width: 120vw; height: 120vw; }
+  .hero__waves span:nth-child(3) { width: 95vw; height: 95vw; }
 
   .ghstats { padding: 8px var(--pad); }
   .hero__stats { gap: 24px 40px; padding: 26px 0; }
@@ -453,6 +613,10 @@ img { max-width: 100%; display: block; }
 /* ---- Small phones ---- */
 @media (max-width: 480px) {
   :root { --pad: 18px; }
+
+  .section { padding: 40px var(--pad); }
+  .section__head { margin-bottom: 26px; }
+  .timeline__item { padding-bottom: 34px; }
 
   .hero__actions { margin-top: 28px; }
   .btn { padding: 12px 18px; }

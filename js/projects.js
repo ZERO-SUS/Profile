@@ -1,12 +1,14 @@
 /* =========================================================
-   Public projects rendering (module).
-   Reads projects from Firestore; falls back to blog/projects.json
-   before Firebase is configured. Renders the Work section cards.
+   Live GitHub projects (module).
+   Fetches ALL public repos for the user straight from the GitHub
+   API and renders them as project cards. Each card links to its
+   repo. Cached in localStorage (30 min) so we don't burn the
+   unauthenticated rate limit (60 req/hr) on every visit.
    ========================================================= */
-import { db, isConfigured } from "./firebase-config.js";
-import {
-  collection, getDocs, query, orderBy,
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const USER = "ZERO-SUS";
+const CACHE_KEY = "zs_gh_repos";
+const TTL = 30 * 60 * 1000; // 30 min
 
 const list = document.getElementById("projectList");
 
@@ -15,49 +17,110 @@ if (list) {
     String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const escapeAttr = (s) => escapeText(s).replace(/"/g, "&quot;");
 
-  const card = (p) => `
-    <a class="card ${p.wide ? "card--wide" : ""} reveal is-visible" data-tilt href="${escapeAttr(p.url || "#")}" target="_blank" rel="noopener">
+  const relTime = (iso) => {
+    const d = (Date.now() - new Date(iso).getTime()) / 1000;
+    const day = 86400;
+    if (d < day) return "today";
+    if (d < 2 * day) return "yesterday";
+    if (d < 30 * day) return `${Math.round(d / day)}d ago`;
+    if (d < 365 * day) return `${Math.round(d / (30 * day))}mo ago`;
+    return `${Math.round(d / (365 * day))}y ago`;
+  };
+
+  // Map a GitHub repo object -> the card fields we already style.
+  const card = (repo, wide) => {
+    const lang = repo.language || "Code";
+    const topics = (repo.topics || []).slice(0, 2);
+    const tag = topics.length ? topics.join(" · ") : `${lang} · Repository`;
+    const stack = [
+      lang,
+      repo.stargazers_count ? `★ ${repo.stargazers_count}` : "",
+      repo.forks_count ? `⑂ ${repo.forks_count}` : "",
+    ].filter(Boolean);
+
+    return `
+    <a class="card ${wide ? "card--wide" : ""} reveal is-visible" data-tilt
+       href="${escapeAttr(repo.html_url)}" target="_blank" rel="noopener">
       <div class="card__glow"></div>
       <div class="card__body">
-        <span class="card__tag">${escapeText(p.tag || "")}</span>
-        <h3 class="card__title">${escapeText(p.title || "")}</h3>
-        <p class="card__desc">${escapeText(p.desc || "")}</p>
-        <ul class="card__stack">${(p.stack || []).map((s) => `<li>${escapeText(s)}</li>`).join("")}</ul>
+        <span class="card__tag">${escapeText(tag)}</span>
+        <h3 class="card__title">${escapeText(repo.name)}</h3>
+        <p class="card__desc">${escapeText(repo.description || "No description provided.")}</p>
+        <ul class="card__stack">${stack.map((s) => `<li>${escapeText(s)}</li>`).join("")}</ul>
       </div>
-      <div class="card__meta"><span>${escapeText(p.meta || "")}</span><span class="card__arrow">↗</span></div>
+      <div class="card__meta">
+        <span>Updated ${escapeText(relTime(repo.pushed_at))}</span>
+        <span class="card__arrow">↗</span>
+      </div>
     </a>`;
+  };
 
-  const render = (projects) => {
-    if (!projects.length) {
-      list.innerHTML = `<p class="blog__state">No projects yet.</p>`;
+  const render = (repos) => {
+    if (!repos || !repos.length) {
+      list.innerHTML = `<p class="blog__state">No repositories found.</p>`;
       return;
     }
-    list.innerHTML = projects.map(card).join("");
-    // re-enable pointer glow + tilt on the freshly injected cards
+    // Most-starred first, then most recently pushed. Top repo gets the wide "featured" box.
+    const sorted = repos.slice().sort(
+      (a, b) =>
+        (b.stargazers_count - a.stargazers_count) ||
+        (new Date(b.pushed_at) - new Date(a.pushed_at))
+    );
+    list.innerHTML = sorted.map((r, i) => card(r, i === 0)).join("");
     if (window.ZS_initTilt) window.ZS_initTilt(list);
   };
 
-  async function load() {
+  // ---- cache ----
+  const readCache = () => {
     try {
-      if (isConfigured && db) {
-        const snap = await getDocs(query(collection(db, "projects"), orderBy("order", "asc")));
-        const projects = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-        render(projects.length ? projects : await fallback());
-      } else {
-        render(await fallback());
-      }
-    } catch (err) {
-      console.error(err);
-      try { render(await fallback()); } catch { list.innerHTML = `<p class="blog__state">Couldn't load projects.</p>`; }
+      const raw = JSON.parse(localStorage.getItem(CACHE_KEY));
+      if (raw && raw.repos) return { repos: raw.repos, fresh: Date.now() - raw.t < TTL };
+    } catch {}
+    return null;
+  };
+  const writeCache = (repos) => {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), repos })); } catch {}
+  };
+
+  // ---- fetch every public repo (paginated) ----
+  async function fetchRepos() {
+    const headers = { Accept: "application/vnd.github+json" };
+    let all = [], page = 1;
+    while (page <= 5) { // up to 500 repos
+      const r = await fetch(
+        `https://api.github.com/users/${USER}/repos?per_page=100&page=${page}&type=owner&sort=pushed`,
+        { headers }
+      );
+      if (!r.ok) throw new Error("gh repos " + r.status);
+      const batch = await r.json();
+      all = all.concat(batch);
+      if (batch.length < 100) break;
+      page++;
     }
+    // Keep the user's own work (skip forks); trim to what we render.
+    return all
+      .filter((repo) => !repo.fork)
+      .map((repo) => ({
+        name: repo.name,
+        description: repo.description,
+        html_url: repo.html_url,
+        language: repo.language,
+        stargazers_count: repo.stargazers_count,
+        forks_count: repo.forks_count,
+        pushed_at: repo.pushed_at,
+        topics: repo.topics,
+      }));
   }
 
-  async function fallback() {
-    const r = await fetch(`blog/projects.json?t=${Date.now()}`);
-    const data = await r.json();
-    return (Array.isArray(data) ? data : data.projects || [])
-      .sort((a, b) => (a.order || 0) - (b.order || 0));
-  }
+  // ---- run: show cache instantly, then refresh in the background ----
+  const cached = readCache();
+  if (cached) render(cached.repos);
 
-  load();
+  if (!cached || !cached.fresh) {
+    fetchRepos()
+      .then((repos) => { render(repos); writeCache(repos); })
+      .catch(() => {
+        if (!cached) list.innerHTML = `<p class="blog__state">Couldn't load repositories right now.</p>`;
+      });
+  }
 }

@@ -14,6 +14,24 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <!-- Intro / enter gate: the single tap here starts the site + music with sound -->
+  <div class="enter" id="enterGate">
+    <div class="enter__orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="enter__glass">
+      <div class="enter__sheen" aria-hidden="true"></div>
+      <div class="enter__inner">
+        <span class="enter__mark">0S</span>
+        <h1 class="enter__title">ZERO&nbsp;SUS</h1>
+        <button class="enter__btn glass-btn" id="enterBtn" type="button">
+          <span class="glass-btn__shine" aria-hidden="true"></span>
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+          <span>Tap to enter</span>
+        </button>
+        <span class="enter__hint">sound on</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Ambient background -->
   <div class="bg-grid" aria-hidden="true"></div>
   <div class="bg-glow" aria-hidden="true"></div>
@@ -44,8 +62,8 @@
   <main id="top">
     <!-- HERO -->
     <section class="hero" id="hero">
-      <div class="hero__bg" aria-hidden="true">
-        <img src="assets/hero.png" alt="" decoding="async" />
+      <div class="hero__waves" aria-hidden="true">
+        <span></span><span></span><span></span>
       </div>
 
       <div class="hero__center">

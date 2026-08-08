@@ -129,26 +129,48 @@
   // let dynamically-injected cards (projects.js) hook in
   window.ZS_initTilt = initTilt;
 
-  /* ---- Background music: always on ---- */
+  /* ---- Enter gate + background music ----
+     Browsers block audio-with-sound until the visitor interacts, so we use a
+     single "Tap to enter" gate: that one tap starts the music WITH sound, every
+     time, on every device. The track buffers muted underneath so it's instant. */
   const music = $("#bgMusic");
+  const gate = $("#enterGate");
+  const enterBtn = $("#enterBtn");
+
   if (music) {
     music.volume = 0.35;
-    // Muted autoplay is ALWAYS allowed, so start playing (silently) right
-    // away — the track buffers and runs from load. On the visitor's first
-    // interaction we just unmute, so sound is instant with no load delay.
+    // Buffer silently right away (muted autoplay is always allowed).
     music.muted = true;
     music.play().catch(() => {});
+  }
 
+  const enterSite = () => {
+    if (gate) gate.classList.add("is-hidden");
+    document.body.style.overflow = "";
+    if (music) {
+      music.muted = false;
+      music.play().catch(() => {});
+    }
+  };
+
+  if (gate) {
+    // Lock scrolling behind the gate until the visitor enters.
+    document.body.style.overflow = "hidden";
+    (enterBtn || gate).addEventListener("click", enterSite);
+    // Any key also enters (feels natural on desktop).
+    window.addEventListener("keydown", function onKey() {
+      window.removeEventListener("keydown", onKey);
+      enterSite();
+    });
+  } else if (music) {
+    // No gate in the DOM? Fall back to unmute-on-first-interaction.
+    const events = ["pointerdown", "keydown", "touchstart", "click", "scroll"];
     const unmute = () => {
       music.muted = false;
       music.play().catch(() => {});
-      if (!music.muted && !music.paused) {
-        ["pointerdown", "keydown", "touchstart", "click", "scroll"].forEach((e) =>
-          window.removeEventListener(e, unmute));
-      }
+      events.forEach((e) => window.removeEventListener(e, unmute));
     };
-    ["pointerdown", "keydown", "touchstart", "click", "scroll"].forEach((e) =>
-      window.addEventListener(e, unmute, { passive: true }));
+    events.forEach((e) => window.addEventListener(e, unmute, { passive: true }));
   }
 
   /* ---- Live date + clock (big outro) ---- */
