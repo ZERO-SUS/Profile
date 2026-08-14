@@ -1,13 +1,14 @@
 /* =========================================================
    Live GitHub projects (module).
-   Fetches ALL public repos for the user straight from the GitHub
-   API and renders them as project cards. Each card links to its
-   repo. Cached in localStorage (30 min) so we don't burn the
-   unauthenticated rate limit (60 req/hr) on every visit.
+   Fetches the repos the user has STARRED from the GitHub API,
+   keeps only the ones the user owns themselves, and renders them
+   as project cards. Each card links to its repo. Cached in
+   localStorage (30 min) so we don't burn the unauthenticated
+   rate limit (60 req/hr) on every visit.
    ========================================================= */
 
 const USER = "ZERO-SUS";
-const CACHE_KEY = "zs_gh_repos";
+const CACHE_KEY = "zs_gh_starred";
 const TTL = 30 * 60 * 1000; // 30 min
 
 const list = document.getElementById("projectList");
@@ -56,8 +57,8 @@ if (list) {
   };
 
   const render = (repos) => {
-    // Only show starred repos (at least one star).
-    const starred = (repos || []).filter((r) => (r.stargazers_count || 0) > 0);
+    // `repos` already contains only repos the user starred AND owns (see fetchRepos).
+    const starred = repos || [];
     if (!starred.length) {
       list.innerHTML = `<p class="blog__state">No starred repositories yet.</p>`;
       return;
@@ -84,23 +85,24 @@ if (list) {
     try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), repos })); } catch {}
   };
 
-  // ---- fetch every public repo (paginated) ----
+  // ---- fetch every repo the user has starred (paginated) ----
   async function fetchRepos() {
     const headers = { Accept: "application/vnd.github+json" };
     let all = [], page = 1;
-    while (page <= 5) { // up to 500 repos
+    while (page <= 5) { // up to 500 starred repos
       const r = await fetch(
-        `https://api.github.com/users/${USER}/repos?per_page=100&page=${page}&type=owner&sort=pushed`,
+        `https://api.github.com/users/${USER}/starred?per_page=100&page=${page}`,
         { headers }
       );
-      if (!r.ok) throw new Error("gh repos " + r.status);
+      if (!r.ok) throw new Error("gh starred " + r.status);
       const batch = await r.json();
       all = all.concat(batch);
       if (batch.length < 100) break;
       page++;
     }
-    // Keep the user's own work (skip forks); trim to what we render.
+    // Only repos the user starred AND owns themselves (skip forks); trim to what we render.
     return all
+      .filter((repo) => repo.owner && repo.owner.login && repo.owner.login.toLowerCase() === USER.toLowerCase())
       .filter((repo) => !repo.fork)
       .map((repo) => ({
         name: repo.name,
